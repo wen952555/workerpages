@@ -1,102 +1,120 @@
+/* 全局基础设置 */
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background-color: #121212;
-    color: white;
+    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #f4f7f6; /* 浅灰色背景，不刺眼 */
+    color: #333333; /* 深色文字，确保看清 */
 }
 
-/* 认证页面样式 */
+/* 注册登录容器 */
 .container {
-    max-width: 400px;
-    margin: 100px auto;
-    background: #1e1e1e;
-    padding: 30px;
-    border-radius: 16px;
+    max-width: 360px;
+    margin: 60px auto;
+    background: #ffffff;
+    padding: 30px 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
     text-align: center;
 }
+
+h1 { color: #00703c; margin-bottom: 30px; }
+
+/* 输入框优化 */
 input {
     width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 8px;
-    border: 1px solid #333;
-    background: #2a2a2a;
-    color: white;
+    padding: 15px;
+    margin: 12px 0;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: #ffffff;
+    color: #333;
     box-sizing: border-box;
+    font-size: 16px; /* 防止 iOS 自动放大 */
 }
 
-/* 顶部导航条 */
+/* 按钮优化 */
+button {
+    width: 100%;
+    padding: 15px;
+    background-color: #00703c;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#toggle-text { color: #666; font-size: 14px; margin-top: 20px; }
+#toggle-text a { color: #00703c; font-weight: bold; text-decoration: none; }
+
+/* 游戏大厅顶部导航 */
 .top-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #1e1e1e;
-    padding: 10px 20px;
-    border-bottom: 1px solid #333;
+    background: #ffffff;
+    padding: 12px 15px;
+    border-bottom: 2px solid #00703c;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
-.coin-display {
-    color: #ffcc00;
-    font-weight: bold;
-    font-size: 1.2em;
-}
-.nav-btn {
-    padding: 8px 15px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-}
-.logout { background: #ff4d4d; color: white; }
-.manage { background: #007bff; color: white; }
 
-/* 游戏场次卡片 */
-.lobby-content {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.user-info { text-align: center; }
+.user-info span { font-weight: bold; color: #333; font-size: 14px; }
+.coin-display { color: #d4a017; font-weight: 800; font-size: 18px; }
+
+.nav-btn {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: bold;
 }
+.logout { background: #ffeded; color: #ff4d4d; border: 1px solid #ff4d4d; }
+.manage { background: #e6f7ef; color: #00703c; border: 1px solid #00703c; }
+
+/* 游戏大厅卡片布局 */
+.lobby-content { padding: 15px; }
+
 .game-card {
-    padding: 25px;
+    background: #ffffff;
+    margin-bottom: 15px;
+    padding: 20px;
     border-radius: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(135deg, #2c3e50, #000000);
-    border-left: 5px solid #00703c;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border-left: 6px solid #00703c;
 }
-.game-card.evening { border-left-color: #e67e22; }
-.game-card.noon { border-left-color: #3498db; }
+
+.game-card h3 { margin: 0; color: #333; font-size: 18px; }
+.game-card p { margin: 5px 0 0; color: #888; font-size: 13px; }
 
 .join-btn {
+    width: auto;
+    padding: 10px 20px;
     background: #00703c;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 25px;
-    font-weight: bold;
-    cursor: pointer;
+    border-radius: 50px;
 }
 
 /* 弹窗样式 */
 .modal {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8);
-    display: flex;
+    background: rgba(0,0,0,0.6);
+    display: none;
     justify-content: center;
     align-items: center;
+    z-index: 1000;
 }
 .modal-content {
-    background: #1e1e1e;
+    background: white;
     padding: 25px;
-    border-radius: 15px;
-    width: 90%;
-    max-width: 350px;
-    position: relative;
+    border-radius: 20px;
+    width: 85%;
+    max-width: 320px;
+    color: #333;
 }
-.close {
-    position: absolute;
-    right: 15px; top: 10px;
-    font-size: 24px;
-    cursor: pointer;
-}
+.modal-content h3 { margin-top: 0; text-align: center; color: #00703c; }

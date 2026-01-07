@@ -1,73 +1,38 @@
-body { background: #f0f2f5; margin: 0; font-family: sans-serif; color: #333; }
+body { background: #f4f7f6; margin: 0; font-family: sans-serif; color: #333; }
+.container { max-width: 350px; margin: 50px auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
-/* 牌桌布局：3-5-5 垂直排列 */
-.cards-grid {
+/* 3-5-5 牌阵布局 */
+.cards-grid-355 {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    grid-gap: 5px;
-    padding: 10px;
-    background: #00703c; /* 牌桌绿 */
-    border-radius: 10px;
+    grid-gap: 8px;
+    background: #00703c;
+    padding: 15px;
+    border-radius: 12px;
     margin: 10px;
 }
 
-/* 前3张占满第一行，居中 */
+/* 前3张(头道) 居中处理 */
+.poker-card:nth-child(1) { grid-column: 2; }
+.poker-card:nth-child(2) { grid-column: 3; }
+.poker-card:nth-child(3) { grid-column: 4; }
+
+/* 后10张(中道/尾道) 自然排列 */
 .poker-card {
     width: 100%;
     aspect-ratio: 2/3;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    transition: transform 0.1s;
-}
-
-.poker-card.selected {
-    transform: translateY(-15px);
-    outline: 3px solid #ffcc00;
-}
-
-/* 前3张牌的特殊定位 (前3个子元素居中) */
-.poker-card:nth-child(-n+3) {
-    grid-column: span 1;
-}
-
-.table-header {
-    display: flex;
-    justify-content: space-around;
     background: white;
-    padding: 10px;
-    border-bottom: 2px solid #00703c;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
+.poker-card.selected { transform: translateY(-10px); border: 3px solid #ffcc00; }
 
-.track-user {
-    padding: 5px 10px;
-    border-radius: 5px;
-    background: #eee;
-    font-size: 12px;
-}
+/* 轨道进度 */
+.track-header { display: flex; justify-content: space-around; background: #fff; padding: 10px; border-bottom: 2px solid #00703c; }
+.track-node { font-size: 12px; padding: 4px 8px; border-radius: 4px; background: #eee; }
+.track-node.finished { background: #00703c; color: white; }
 
-.track-user.active {
-    background: #00703c;
-    color: white;
-}
-
-.submit-btn {
-    background: #00703c;
-    color: white;
-    font-size: 20px;
-    padding: 15px;
-    width: 90%;
-    margin: 10px 5%;
-    border-radius: 50px;
-    border: none;
-    font-weight: bold;
-}
-
-.smart-btn {
-    background: #e6f7ef;
-    color: #00703c;
-    padding: 10px;
-    width: 40%;
-    margin-left: 5%;
-    border: 1px solid #00703c;
-    border-radius: 10px;
-}
+/* 导航与按钮 */
+.top-nav { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: white; border-bottom: 1px solid #ddd; }
+.game-card { background: white; padding: 20px; margin: 15px; border-radius: 12px; border-left: 5px solid #00703c; box-shadow: 0 3px 6px rgba(0,0,0,0.05); }
+.btn-submit { background: #00703c; color: white; border: none; padding: 15px; width: 90%; margin: 10px 5%; border-radius: 30px; font-weight: bold; font-size: 18px; }

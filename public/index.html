@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>十三水 - PWA版</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div id="game-table">
+        <h1>十三水游戏桌</h1>
+        <div id="card-display">
+            <!-- 扑克牌图片会在这里显示 -->
+        </div>
+        <button onclick="drawCards()">点击发牌</button>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // 注册 PWA 服务
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+    </script>
+</body>
+</html>

@@ -3,56 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>十三水</title>
+    <title>十三水大厅</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
 </head>
 <body>
     <div id="app">
-        <!-- 登录注册 -->
+        <!-- 登录界面 -->
         <div id="auth-section" class="container">
             <h1 id="auth-title">玩家登录</h1>
             <input type="tel" id="auth-phone" placeholder="手机号">
-            <input type="text" id="auth-nick" placeholder="昵称 (仅注册)" style="display:none;">
+            <input type="text" id="auth-nick" placeholder="昵称(注册)" style="display:none;">
             <input type="password" id="auth-pass" maxlength="6" placeholder="6位数字密码">
-            <button id="primary-btn" onclick="handleAuth()">进入游戏</button>
-            <p id="toggle-text">没有账号？ <a href="#" onclick="toggleAuthMode(true)">立即注册</a></p>
+            <button id="primary-btn" onclick="handleAuth()">进入大厅</button>
+            <p id="toggle-text">新玩家？<a href="#" onclick="toggleAuthMode(true)">立即注册</a></p>
         </div>
 
-        <!-- 大厅 -->
+        <!-- 游戏大厅 -->
         <div id="game-hall" style="display:none;">
             <div class="top-nav">
-                <button class="nav-btn logout" onclick="logout()">退出</button>
-                <div class="user-info">
-                    <span id="user-name"></span>
-                    <div class="coin-display">💰 <span id="user-coins">0</span></div>
-                </div>
-                <button class="nav-btn manage" onclick="togglePointsManage()">积分管理</button>
+                <button onclick="logout()">退出</button>
+                <div class="user-info"><b id="user-name"></b> 💰<span id="user-coins">0</span></div>
+                <button onclick="togglePointsManage()">积分管理</button>
             </div>
             <div class="lobby-content">
                 <div class="game-card" onclick="joinSession('8pm')">
-                    <h3>预约：今晚 20:00 场</h3>
-                    <p>等待中: <span id="count-8pm">0/4</span></p>
+                    <h3>今晚 20:00 预约场</h3>
+                    <p>当前等待: <span id="count-8pm">0/4</span></p>
                 </div>
                 <div class="game-card" onclick="joinSession('12pm')">
-                    <h3>预约：明日 12:00 场</h3>
-                    <p>等待中: <span id="count-12pm">0/4</span></p>
+                    <h3>明日 12:00 预约场</h3>
+                    <p>当前等待: <span id="count-12pm">0/4</span></p>
                 </div>
             </div>
         </div>
 
-        <!-- 牌桌 -->
+        <!-- 理牌牌桌 -->
         <div id="game-table" style="display:none;">
             <div class="track-header" id="track-info"></div>
-            <div class="table-container">
-                <div id="cards-grid" class="cards-grid"></div>
-            </div>
+            <div class="cards-grid" id="cards-grid"></div>
             <div class="controls">
-                <div id="card-type-tips">点击牌面交换位置...</div>
-                <div class="btn-row">
-                    <button class="btn-smart" onclick="smartSort()">智能理牌</button>
-                    <button class="btn-submit" onclick="submitHand()">确认提交</button>
-                </div>
+                <button class="btn-smart" onclick="smartSort()">智能理牌</button>
+                <button class="btn-submit" onclick="submitHand()">确认提交</button>
             </div>
         </div>
 

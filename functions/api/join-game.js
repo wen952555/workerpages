@@ -5,7 +5,7 @@ export async function onRequestPost(context) {
     try {
         const { userId, sessionType } = await context.request.json();
 
-        // 1. 优先检查玩家是否已经在该场次的某个轨道中（轨道锁定逻辑）
+        // 1. 查找玩家是否已在活跃轨道中
         let track = await db.prepare(
             "SELECT * FROM tracks WHERE session_type = ? AND (user_e = ? OR user_s = ? OR user_w = ? OR user_n = ?) AND status = 'ACTIVE' LIMIT 1"
         ).bind(sessionType, userId, userId, userId, userId).first();
@@ -13,22 +13,21 @@ export async function onRequestPost(context) {
         let seat = '';
 
         if (!track) {
-            // 2. 如果不在轨道中，寻找一个有空位的轨道
+            // 2. 寻找有空位的轨道
             track = await db.prepare(
                 "SELECT * FROM tracks WHERE session_type = ? AND status = 'ACTIVE' AND (user_e IS NULL OR user_s IS NULL OR user_w IS NULL OR user_n IS NULL) ORDER BY id DESC LIMIT 1"
             ).bind(sessionType).first();
 
             if (!track) {
-                // 3. 全满或没开，创建新轨道，默认坐东位 (user_e)
+                // 3. 全满，开新轨道
                 const info = await db.prepare("INSERT INTO tracks (session_type, user_e) VALUES (?, ?)")
                     .bind(sessionType, userId).run();
                 
-                // 获取新生成的 ID
                 const newId = info.meta.last_row_id;
                 track = await db.prepare("SELECT * FROM tracks WHERE id = ?").bind(newId).first();
                 seat = 'user_e';
             } else {
-                // 4. 有空位，按顺序分配席位
+                // 4. 有位，填空
                 if (!track.user_e) seat = 'user_e';
                 else if (!track.user_s) seat = 'user_s';
                 else if (!track.user_w) seat = 'user_w';
@@ -37,14 +36,14 @@ export async function onRequestPost(context) {
                 await db.prepare(`UPDATE tracks SET ${seat} = ? WHERE id = ?`).bind(userId, track.id).run();
             }
         } else {
-            // 5. 玩家已在轨道中，确定他的席位
+            // 5. 确定老位子
             if (track.user_e === userId) seat = 'user_e';
             else if (track.user_s === userId) seat = 'user_s';
             else if (track.user_w === userId) seat = 'user_w';
             else seat = 'user_n';
         }
 
-        // 6. 查找或生成第一轮车厢 (Carriage 1, 包含10局牌)
+        // 6. 查找或生成第一轮车厢 (10局牌)
         let carriage = await db.prepare("SELECT * FROM carriages WHERE track_id = ? AND round_index = 1").bind(track.id).first();
         
         if (!carriage) {
@@ -52,11 +51,9 @@ export async function onRequestPost(context) {
             const suits = ['spades', 'hearts', 'diamonds', 'clubs'];
             const values = ['2','3','4','5','6','7','8','9','10','jack','queen','king','ace'];
 
-            // 循环生成10局
             for(let i=0; i<10; i++) {
                 let deck = [];
                 suits.forEach(s => values.forEach(v => deck.push({value: v, suit: s})));
-                // 洗牌
                 for (let j = deck.length - 1; j > 0; j--) {
                     const k = Math.floor(Math.random() * (j + 1));
                     [deck[j], deck[k]] = [deck[k], deck[j]];
@@ -71,26 +68,20 @@ export async function onRequestPost(context) {
             const handsJson = JSON.stringify(allHands);
             const info = await db.prepare("INSERT INTO carriages (track_id, round_index, hands_json) VALUES (?, 1, ?)")
                 .bind(track.id, handsJson).run();
-            
-            const newCarriageId = info.meta.last_row_id;
-            carriage = { id: newCarriageId, hands_json: handsJson };
+            carriage = { id: info.meta.last_row_id, hands_json: handsJson };
         }
 
-        // 7. 确定玩家当前的进度 (第几局)
+        // 7. 确定进度
         const lastAction = await db.prepare(
             "SELECT table_index FROM player_actions WHERE user_id = ? AND carriage_id = ? AND status = 'SUBMITTED' ORDER BY table_index DESC LIMIT 1"
         ).bind(userId, carriage.id).first();
 
         const tableIndex = lastAction ? lastAction.table_index + 1 : 0;
-
-        if (tableIndex >= 10) {
-            return new Response(JSON.stringify({ success: false, error: "本轮已完成，请等待结算或进入下一轮" }), { status: 400 });
-        }
+        if (tableIndex >= 10) return new Response(JSON.stringify({ success: false, error: "本轮已完成" }), { status: 400 });
 
         const handsData = JSON.parse(carriage.hands_json);
-        const currentHand = handsData[tableIndex][seat];
-
-        // 8. 记录 VIEWED 状态
+        
+        // 8. 记录已看牌状态 (防止逃跑)
         await db.prepare("INSERT OR IGNORE INTO player_actions (user_id, carriage_id, table_index, status) VALUES (?, ?, ?, 'VIEWED')")
             .bind(userId, carriage.id, tableIndex).run();
 
@@ -100,17 +91,11 @@ export async function onRequestPost(context) {
             carriageId: carriage.id,
             seat: seat,
             tableIndex: tableIndex,
-            currentHand: currentHand,
-            trackProgress: [
-                track.user_e ? 1 : 0, 
-                track.user_s ? 1 : 0, 
-                track.user_w ? 1 : 0, 
-                track.user_n ? 1 : 0
-            ]
-        }));
+            currentHand: handsData[tableIndex][seat],
+            trackProgress: [track.user_e?1:0, track.user_s?1:0, track.user_w?1:0, track.user_n?1:0]
+        }), { headers: { 'Content-Type': 'application/json' } });
 
     } catch (e) {
-        // 如果报错，直接返回具体错误文字，方便调试
-        return new Response(JSON.stringify({ success: false, error: "D1执行错误: " + e.message }), { status: 500 });
+        return new Response(JSON.stringify({ success: false, error: e.message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
     }
 }

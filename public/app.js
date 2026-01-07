@@ -130,14 +130,20 @@ async function joinSession(type) {
         });
         
         const data = await res.json();
+        
+        if (!res.ok) {
+            alert("发生错误: " + (data.error || "未知服务器故障"));
+            return;
+        }
+
         if (data.success) {
             currentGame = data; 
             showTable();
         } else {
-            alert("进入场次失败: " + data.error);
+            alert("游戏逻辑错误: " + data.error);
         }
     } catch (e) {
-        alert("请求异常，请检查网络");
+        alert("网络异常或代码崩溃，请检查后端日志");
     }
 }
 

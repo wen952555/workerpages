@@ -1,5 +1,4 @@
 window.onload = () => {
-    // 自动登录
     const saved = localStorage.getItem('shisanshui_user');
     if (saved) {
         currentUser = JSON.parse(saved);
@@ -10,14 +9,13 @@ window.onload = () => {
         startPolling();
     }
 
-    // PWA 更新
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js').then(reg => {
             reg.onupdatefound = () => {
                 const nw = reg.installing;
                 nw.onstatechange = () => {
                     if (nw.state === 'installed' && navigator.serviceWorker.controller) {
-                        if (confirm("新版本已发布，是否立即刷新体验新界面？")) location.reload();
+                        if (confirm("系统已更新，是否刷新体验新版理牌功能？")) location.reload();
                     }
                 };
             };

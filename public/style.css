@@ -1,24 +1,30 @@
-body { background: #f4f7f6; margin: 0; font-family: sans-serif; }
-.container { max-width: 350px; margin: 50px auto; background: white; padding: 20px; border-radius: 15px; }
+body { margin: 0; font-family: sans-serif; background: #f0f4f2; color: #333; }
+.container { max-width: 350px; margin: 40px auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); text-align: center; }
+input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+button { width: 100%; padding: 12px; background: #00703c; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-/* 牌墩布局 */
-.lane-label { background: #005a30; color: #fff; font-size: 12px; padding: 4px 15px; border-radius: 10px 10px 0 0; margin: 0 10px; display: inline-block; }
-.cards-grid {
-    display: flex; gap: 5px; background: #00703c; padding: 10px; 
-    border-radius: 0 10px 10px 10px; margin: 0 10px 15px 10px; min-height: 80px;
-}
+/* 顶部导航 */
+.top-nav { display: flex; justify-content: space-between; align-items: center; background: white; padding: 10px 15px; border-bottom: 2px solid #00703c; }
+.coin-display { color: #d4a017; font-weight: bold; font-size: 18px; }
+.nav-btn { width: auto; font-size: 13px; padding: 6px 12px; }
 
-.poker-card {
-    width: 60px; aspect-ratio: 2/3; background: white; border-radius: 4px;
-    border: 2px solid transparent; transition: all 0.2s;
-}
+/* 场次卡片 */
+.lobby-content { padding: 15px; }
+.game-card { background: white; border-radius: 15px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-left: 6px solid #00703c; }
+.game-card h3 { margin: 0; font-size: 16px; }
+.game-card p { margin: 5px 0 0; color: #666; font-size: 13px; }
+.card-right { background: #e6f7ef; color: #00703c; padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
 
-/* 红色高亮 */
-.poker-card.selected {
-    border: 3px solid #ff0000;
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(255,0,0,0.3);
-}
+/* 牌桌与 3-5-5 */
+.lane-header { background: #005a30; color: white; padding: 5px 15px; border-radius: 10px 10px 0 0; margin: 0 10px; font-size: 12px; display: inline-block; cursor: pointer; }
+.cards-grid { background: #00703c; padding: 10px; display: flex; gap: 5px; min-height: 80px; margin: 0 10px 10px 10px; border-radius: 0 10px 10px 10px; flex-wrap: wrap; }
+.poker-card { width: 55px; aspect-ratio: 2/3; border-radius: 4px; border: 2px solid transparent; background: white; transition: all 0.1s; }
 
-.track-header { display: flex; justify-content: space-around; background: #fff; padding: 10px; }
-.track-node.finished { background: #00703c; color: white; padding: 2px 8px; border-radius: 4px; }
+/* 核心：选中变红高亮 */
+.poker-card.selected { border: 3px solid #ff0000; transform: translateY(-8px); box-shadow: 0 5px 15px rgba(255,0,0,0.4); }
+
+.controls { padding: 10px; text-align: center; }
+.btn-row { display: flex; gap: 10px; padding: 0 10px; }
+.btn-smart { background: #eee; color: #333; }
+.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; }
+.modal-content { background: white; padding: 25px; border-radius: 20px; width: 80%; }

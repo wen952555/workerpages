@@ -24,9 +24,9 @@ async function handleAuth() {
         if (data.success) {
             currentUser = data.user;
             localStorage.setItem('shisanshui_user', JSON.stringify(currentUser));
-            location.reload(); // 刷新让 pwa.js 接管进入大厅
+            location.reload();
         } else alert(data.error);
-    } catch (e) { alert("认证请求失败"); }
+    } catch (e) { alert("登录请求失败"); }
 }
 
 function logout() {

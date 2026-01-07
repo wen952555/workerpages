@@ -23,10 +23,10 @@ async function searchPlayer() {
     const data = await res.json();
     const div = document.getElementById('search-result');
     if (data.nickname) {
-        div.innerHTML = `<div style="color:green;padding:10px">找到玩家: ${data.nickname}</div>`;
+        div.innerHTML = `<div style="color:green;padding:10px;background:#f0fff0;margin-top:10px">✅ 找到玩家: ${data.nickname}</div>`;
         document.getElementById('transfer-box').style.display = 'block';
         window.targetPhone = phone;
-    } else div.innerHTML = "用户不存在";
+    } else div.innerHTML = "❌ 玩家不存在";
 }
 
 async function sendCoins() {

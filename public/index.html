@@ -3,37 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>十三水大厅</title>
+    <title>十三水专业版</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
 </head>
 <body>
     <div id="app">
-        <!-- 登录界面 -->
+        <!-- 登录注册区 -->
         <div id="auth-section" class="container">
-            <h1 id="auth-title">玩家登录</h1>
+            <h1 id="auth-title">登录</h1>
             <input type="tel" id="auth-phone" placeholder="手机号">
-            <input type="text" id="auth-nick" placeholder="昵称(注册)" style="display:none;">
-            <input type="password" id="auth-pass" maxlength="6" placeholder="6位数字密码">
-            <button id="primary-btn" onclick="handleAuth()">进入大厅</button>
-            <p id="toggle-text">新玩家？<a href="#" onclick="toggleAuthMode(true)">立即注册</a></p>
+            <input type="text" id="auth-nick" placeholder="昵称" style="display:none;">
+            <input type="password" id="auth-pass" maxlength="6" placeholder="6位密码">
+            <button onclick="handleAuth()" id="primary-btn">进入游戏</button>
+            <p id="toggle-text">没有账号？<a href="#" onclick="toggleAuthMode(true)">立即注册</a></p>
         </div>
 
         <!-- 游戏大厅 -->
         <div id="game-hall" style="display:none;">
             <div class="top-nav">
-                <button onclick="logout()">退出</button>
+                <button onclick="logout()" class="nav-btn logout">退出</button>
                 <div class="user-info"><b id="user-name"></b> 💰<span id="user-coins">0</span></div>
-                <button onclick="togglePointsManage()">积分管理</button>
+                <button onclick="togglePointsManage()" class="nav-btn manage">积分</button>
             </div>
             <div class="lobby-content">
                 <div class="game-card" onclick="joinSession('8pm')">
-                    <h3>今晚 20:00 预约场</h3>
-                    <p>当前等待: <span id="count-8pm">0/4</span></p>
+                    <h3>预约：今晚 20:00 场</h3>
+                    <p>排队: <span id="count-8pm">0/4</span></p>
                 </div>
                 <div class="game-card" onclick="joinSession('12pm')">
-                    <h3>明日 12:00 预约场</h3>
-                    <p>当前等待: <span id="count-12pm">0/4</span></p>
+                    <h3>预约：明日 12:00 场</h3>
+                    <p>排队: <span id="count-12pm">0/4</span></p>
                 </div>
             </div>
         </div>
@@ -41,28 +41,45 @@
         <!-- 理牌牌桌 -->
         <div id="game-table" style="display:none;">
             <div class="track-header" id="track-info"></div>
-            <div class="cards-grid" id="cards-grid"></div>
+            <div class="table-container">
+                <div class="lane-label" onclick="moveSelectedToLane(0)">头道 (点击此处移入)</div>
+                <div id="grid-head" class="cards-grid"></div>
+                
+                <div class="lane-label" onclick="moveSelectedToLane(3)">中道 (点击此处移入)</div>
+                <div id="grid-mid" class="cards-grid"></div>
+                
+                <div class="lane-label" onclick="moveSelectedToLane(8)">尾道 (点击此处移入)</div>
+                <div id="grid-tail" class="cards-grid"></div>
+            </div>
             <div class="controls">
-                <button class="btn-smart" onclick="smartSort()">智能理牌</button>
-                <button class="btn-submit" onclick="submitHand()">确认提交</button>
+                <div id="card-type-tips">点击牌多选(红框)，点击道标题移动</div>
+                <div class="btn-row">
+                    <button class="btn-smart" onclick="smartSort()">自动理牌</button>
+                    <button class="btn-submit" onclick="submitHand()">提交方案</button>
+                </div>
             </div>
         </div>
 
-        <!-- 积分管理 -->
+        <!-- 积分管理弹窗 -->
         <div id="points-modal" class="modal" style="display:none;">
             <div class="modal-content">
-                <h3>积分赠送</h3>
+                <h3>积分管理</h3>
                 <input type="tel" id="search-phone" placeholder="接收人手机号">
                 <button onclick="searchPlayer()">查询</button>
                 <div id="search-result"></div>
                 <div id="transfer-box" style="display:none;">
-                    <input type="number" id="send-amount" placeholder="赠送数量">
+                    <input type="number" id="send-amount" placeholder="金额">
                     <button onclick="sendCoins()" class="confirm-btn">确认赠送</button>
                 </div>
                 <button onclick="togglePointsManage()" class="close-btn">关闭</button>
             </div>
         </div>
     </div>
-    <script src="app.js"></script>
+
+    <!-- 顺序加载拆分后的 JS -->
+    <script src="js/auth.js"></script>
+    <script src="js/lobby.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/pwa.js"></script>
 </body>
 </html>

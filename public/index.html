@@ -1,39 +1,60 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>十三水 - 积分系统</title>
+    <title>十三水专业版</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
 </head>
 <body>
     <div id="app">
-        <!-- 登录/注册区 -->
-        <div id="auth-section">
-            <h3>玩家注册</h3>
-            <input type="tel" id="reg-phone" placeholder="手机号">
-            <input type="text" id="reg-nick" placeholder="游戏昵称">
-            <input type="password" id="reg-pass" maxlength="6" placeholder="6位密码">
-            <button onclick="register()">注册并进入游戏</button>
+        <!-- 登录/注册表单 -->
+        <div id="auth-section" class="container">
+            <h1 id="auth-title">玩家登录</h1>
+            <div class="form-group">
+                <input type="tel" id="auth-phone" placeholder="请输入手机号">
+                <input type="text" id="auth-nick" placeholder="游戏昵称 (仅注册需要)" style="display:none;">
+                <input type="password" id="auth-pass" maxlength="6" placeholder="6位数字密码">
+            </div>
+            
+            <div class="button-group">
+                <button id="primary-btn" onclick="handleAuth()">立即登录</button>
+                <p id="toggle-text">没有账号？<a href="javascript:void(0)" onclick="toggleAuthMode(true)">立即注册</a></p>
+            </div>
         </div>
 
-        <!-- 游戏大厅 -->
-        <div id="game-hall" style="display:none;">
-            <h2>欢迎, <span id="user-name"></span></h2>
-            <p>我的积分: <b id="user-coins">0</b></p>
-            <hr>
-            <h3>赠送积分</h3>
-            <input type="tel" id="search-phone" placeholder="输入对方手机号">
-            <button onclick="searchPlayer()">查找</button>
-            <div id="search-result"></div>
-            <div id="transfer-box" style="display:none;">
-                <input type="number" id="send-amount" placeholder="赠送金额">
-                <button onclick="sendCoins()">确认赠送</button>
+        <!-- 游戏大厅 (默认隐藏) -->
+        <div id="game-hall" class="container" style="display:none;">
+            <div class="header">
+                <h2>欢迎, <span id="user-name"></span></h2>
+                <button class="logout-btn" onclick="logout()">退出登录</button>
+            </div>
+            <div class="balance-card">
+                <p>我的积分</p>
+                <h1 id="user-coins">0</h1>
+            </div>
+
+            <div class="actions">
+                <h3>赠送积分</h3>
+                <div class="search-box">
+                    <input type="tel" id="search-phone" placeholder="输入接收人手机号">
+                    <button onclick="searchPlayer()">查找玩家</button>
+                </div>
+                <div id="search-result"></div>
+                <div id="transfer-box" style="display:none;">
+                    <input type="number" id="send-amount" placeholder="赠送数量">
+                    <button onclick="sendCoins()" class="send-btn">确认赠送</button>
+                </div>
             </div>
         </div>
     </div>
     <script src="app.js"></script>
+    <script>
+        // 注册 PWA Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+    </script>
 </body>
 </html>

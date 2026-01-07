@@ -1,0 +1,47 @@
+body {
+    font-family: -apple-system, sans-serif;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+}
+h1, h2 { color: #1a1a1a; text-align: center; }
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #00703c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.logout-btn { background-color: #ff4d4d; width: auto; padding: 5px 10px; font-size: 12px; }
+.balance-card {
+    background: linear-gradient(135deg, #00703c, #00a859);
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 20px 0;
+}
+#toggle-text { text-align: center; font-size: 14px; margin-top: 15px; }
+.header { display: flex; justify-content: space-between; align-items: center; }

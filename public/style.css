@@ -1,120 +1,73 @@
-/* 全局基础设置 */
-body {
-    margin: 0;
-    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background-color: #f4f7f6; /* 浅灰色背景，不刺眼 */
-    color: #333333; /* 深色文字，确保看清 */
-}
+body { background: #f0f2f5; margin: 0; font-family: sans-serif; color: #333; }
 
-/* 注册登录容器 */
-.container {
-    max-width: 360px;
-    margin: 60px auto;
-    background: #ffffff;
-    padding: 30px 20px;
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    text-align: center;
-}
-
-h1 { color: #00703c; margin-bottom: 30px; }
-
-/* 输入框优化 */
-input {
-    width: 100%;
-    padding: 15px;
-    margin: 12px 0;
+/* 牌桌布局：3-5-5 垂直排列 */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 5px;
+    padding: 10px;
+    background: #00703c; /* 牌桌绿 */
     border-radius: 10px;
-    border: 1px solid #ddd;
-    background: #ffffff;
-    color: #333;
-    box-sizing: border-box;
-    font-size: 16px; /* 防止 iOS 自动放大 */
+    margin: 10px;
 }
 
-/* 按钮优化 */
-button {
+/* 前3张占满第一行，居中 */
+.poker-card {
     width: 100%;
-    padding: 15px;
-    background-color: #00703c;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
+    aspect-ratio: 2/3;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: transform 0.1s;
 }
 
-#toggle-text { color: #666; font-size: 14px; margin-top: 20px; }
-#toggle-text a { color: #00703c; font-weight: bold; text-decoration: none; }
+.poker-card.selected {
+    transform: translateY(-15px);
+    outline: 3px solid #ffcc00;
+}
 
-/* 游戏大厅顶部导航 */
-.top-nav {
+/* 前3张牌的特殊定位 (前3个子元素居中) */
+.poker-card:nth-child(-n+3) {
+    grid-column: span 1;
+}
+
+.table-header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #ffffff;
-    padding: 12px 15px;
-    border-bottom: 2px solid #00703c;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.user-info { text-align: center; }
-.user-info span { font-weight: bold; color: #333; font-size: 14px; }
-.coin-display { color: #d4a017; font-weight: 800; font-size: 18px; }
-
-.nav-btn {
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: bold;
-}
-.logout { background: #ffeded; color: #ff4d4d; border: 1px solid #ff4d4d; }
-.manage { background: #e6f7ef; color: #00703c; border: 1px solid #00703c; }
-
-/* 游戏大厅卡片布局 */
-.lobby-content { padding: 15px; }
-
-.game-card {
-    background: #ffffff;
-    margin-bottom: 15px;
-    padding: 20px;
-    border-radius: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    border-left: 6px solid #00703c;
-}
-
-.game-card h3 { margin: 0; color: #333; font-size: 18px; }
-.game-card p { margin: 5px 0 0; color: #888; font-size: 13px; }
-
-.join-btn {
-    width: auto;
-    padding: 10px 20px;
-    background: #00703c;
-    border-radius: 50px;
-}
-
-/* 弹窗样式 */
-.modal {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.6);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-.modal-content {
+    justify-content: space-around;
     background: white;
-    padding: 25px;
-    border-radius: 20px;
-    width: 85%;
-    max-width: 320px;
-    color: #333;
+    padding: 10px;
+    border-bottom: 2px solid #00703c;
 }
-.modal-content h3 { margin-top: 0; text-align: center; color: #00703c; }
+
+.track-user {
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: #eee;
+    font-size: 12px;
+}
+
+.track-user.active {
+    background: #00703c;
+    color: white;
+}
+
+.submit-btn {
+    background: #00703c;
+    color: white;
+    font-size: 20px;
+    padding: 15px;
+    width: 90%;
+    margin: 10px 5%;
+    border-radius: 50px;
+    border: none;
+    font-weight: bold;
+}
+
+.smart-btn {
+    background: #e6f7ef;
+    color: #00703c;
+    padding: 10px;
+    width: 40%;
+    margin-left: 5%;
+    border: 1px solid #00703c;
+    border-radius: 10px;
+}

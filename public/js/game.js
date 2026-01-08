@@ -1,3 +1,6 @@
+/**
+ * game.js - 理牌与多选逻辑
+ */
 let currentGame = null;
 let selectedIndices = []; 
 
@@ -8,12 +11,23 @@ async function joinSession(type) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userId: currentUser.id, sessionType: type })
         });
+        
         const data = await res.json();
+        
+        if (!res.ok) {
+            alert("服务器报错: " + (data.error || "未知故障"));
+            return;
+        }
+
         if (data.success) {
             currentGame = data; 
             showTable();
-        } else alert("进入失败: " + data.error);
-    } catch (e) { alert("服务器连接故障"); }
+        } else {
+            alert("游戏逻辑错误: " + data.error);
+        }
+    } catch (e) { 
+        alert("网络连接超时或代码解析失败"); 
+    }
 }
 
 function showTable() {
@@ -74,10 +88,9 @@ async function submitHand() {
     if (data.nextHand) {
         currentGame.currentHand = data.nextHand;
         currentGame.tableIndex = data.nextIndex;
-        alert(`第 ${data.nextIndex + 1} 局开始！`);
+        alert(`进入下一局`);
         renderCards();
     } else {
-        alert("本轮已完成！");
         location.reload();
     }
 }

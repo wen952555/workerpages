@@ -28,25 +28,24 @@ function showTable() {
     renderTrackProgress();
 }
 
-// 渲染 3-5-5
 function renderCards() {
     const head = document.getElementById('grid-head');
     const mid = document.getElementById('grid-mid');
     const tail = document.getElementById('grid-tail');
-    
     [head, mid, tail].forEach(el => el.innerHTML = '');
 
     currentGame.currentHand.forEach((card, i) => {
         const img = document.createElement('img');
         img.src = `/assets/cards/${card.value}_of_${card.suit}.svg`;
         img.className = 'poker-card';
-        
-        // 变红高亮逻辑
         if (selectedIndices.includes(i)) img.classList.add('selected');
 
         img.onclick = (e) => {
             e.stopPropagation();
-            toggleSelect(i);
+            const pos = selectedIndices.indexOf(i);
+            if (pos > -1) selectedIndices.splice(pos, 1);
+            else selectedIndices.push(i);
+            renderCards();
         };
 
         if (i < 3) head.appendChild(img);
@@ -55,22 +54,14 @@ function renderCards() {
     });
 }
 
-// 多选逻辑
-function toggleSelect(index) {
-    const pos = selectedIndices.indexOf(index);
-    if (pos > -1) selectedIndices.splice(pos, 1);
-    else selectedIndices.push(index);
-    renderCards();
-}
-
-// 批量移动逻辑：点击道标题触发
+// 批量移动：点击牌墩标题移入选中的牌
 function moveSelectedToLane(targetBaseIndex) {
     if (selectedIndices.length === 0) return;
 
     // 1. 提取选中的牌对象
     const pickedCards = selectedIndices.map(idx => currentGame.currentHand[idx]);
     
-    // 2. 从原数组移除
+    // 2. 从原数组移除选中的牌 (由后往前删防止索引错乱)
     const sortedDesc = [...selectedIndices].sort((a, b) => b - a);
     sortedDesc.forEach(idx => currentGame.currentHand.splice(idx, 1));
 
@@ -107,15 +98,12 @@ async function submitHand() {
 
 function renderTrackProgress() {
     const container = document.getElementById('track-info');
-    const seats = ['东', '南', '西', '北'];
-    const progress = currentGame.trackProgress || [1,1,1,1];
-    container.innerHTML = progress.map((p, i) => `
-        <div class="track-node ${p > 1 ? 'finished' : ''}">${seats[i]}:${p}轮</div>
-    `).join('');
+    const progress = currentGame.trackProgress || [0,0,0,0];
+    const seats = ['东','南','西','北'];
+    container.innerHTML = progress.map((p, i) => `<div class="track-node ${p>0?'finished':''}">${seats[i]}</div>`).join('');
 }
 
 function smartSort() {
-    const h = currentGame.currentHand;
-    h.sort((a,b) => b.value.length - a.value.length); // 简单排序演示
+    currentGame.currentHand.sort((a,b) => b.value.length - a.value.length);
     renderCards();
 }

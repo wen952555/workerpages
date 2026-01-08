@@ -1,4 +1,20 @@
-<!DOCTYPE html>
+body { margin: 0; font-family: sans-serif; background: #f4f7f6; color: #333; }
+.container { max-width: 350px; margin: 40px auto; background: white; padding: 25px; border-radius: 20px; text-align: center; }
+input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+button { width: 100%; padding: 12px; background: #00703c; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+/* 牌墩标题 */
+.lane-header { background: #00703c; color: white; padding: 5px 15px; border-radius: 10px 10px 0 0; margin: 0 10px; font-size: 12px; display: inline-block; cursor: pointer; }
+.cards-grid { background: #005a30; padding: 10px; display: flex; gap: 5px; min-height: 80px; margin: 0 10px 15px 10px; border-radius: 0 10px 10px 10px; flex-wrap: wrap; }
+
+/* 扑克牌与红框高亮 */
+.poker-card { width: 55px; aspect-ratio: 2/3; background: white; border-radius: 4px; border: 2px solid transparent; transition: all 0.1s; }
+.poker-card.selected { border: 3px solid #ff0000; transform: translateY(-5px); box-shadow: 0 5px 15px rgba(255,0,0,0.4); }
+
+.top-nav { display: flex; justify-content: space-between; align-items: center; background: white; padding: 10px 15px; border-bottom: 2px solid #00703c; }
+.game-card { background: white; border-radius: 15px; padding: 15px; margin: 15px; border-left: 6px solid #00703c; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+.track-header { display: flex; justify-content: space-around; background: white; padding: 10px; margin-bottom: 10px; }
+.track-node.finished { background: #00703c; color: white; padding: 2px 8px; border-radius: 4px; }<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -29,7 +45,6 @@
                 </div>
                 <button class="nav-btn manage" onclick="togglePointsManage()">积分管理</button>
             </div>
-
             <div class="lobby-content">
                 <!-- 8点场板块 -->
                 <div class="game-card evening" onclick="joinSession('8pm')">
@@ -39,9 +54,8 @@
                     </div>
                     <div class="card-right">预约入场</div>
                 </div>
-
                 <!-- 12点场板块 -->
-                <div class="game-card noon" onclick="joinSession('12pm')">
+                <div class="game-card midday" onclick="joinSession('12pm')">
                     <div class="card-left">
                         <h3>预约：明日 12:00 场</h3>
                         <p>状态：等待中 <span id="count-12pm">0/4</span></p>
@@ -51,26 +65,22 @@
             </div>
         </div>
 
-        <!-- 3. 理牌牌桌 -->
+        <!-- 3. 游戏桌面 -->
         <div id="game-table" style="display:none;">
             <div class="track-header" id="track-info"></div>
-            
             <div class="table-container">
                 <div class="lane-header" onclick="moveSelectedToLane(0)">头道 (点击移入)</div>
                 <div id="grid-head" class="cards-grid"></div>
-                
                 <div class="lane-header" onclick="moveSelectedToLane(3)">中道 (点击移入)</div>
                 <div id="grid-mid" class="cards-grid"></div>
-                
                 <div class="lane-header" onclick="moveSelectedToLane(8)">尾道 (点击移入)</div>
                 <div id="grid-tail" class="cards-grid"></div>
             </div>
-
             <div class="controls">
-                <p class="tips">提示：点击牌多选(红框)，点击上方标题移动</p>
+                <p style="font-size:12px;color:#666;">点击牌多选(变红)，点击绿色标题移入</p>
                 <div class="btn-row">
-                    <button class="btn-smart" onclick="smartSort()">智能理牌</button>
-                    <button class="btn-submit" onclick="submitHand()">确认提交</button>
+                    <button onclick="smartSort()" style="background:#eee;color:#333;width:40%">智能理牌</button>
+                    <button onclick="submitHand()" style="width:60%">确认提交</button>
                 </div>
             </div>
         </div>

@@ -1,30 +1,225 @@
-body { margin: 0; font-family: sans-serif; background: #f0f4f2; color: #333; }
-.container { max-width: 350px; margin: 40px auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); text-align: center; }
-input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
-button { width: 100%; padding: 12px; background: #00703c; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+/* --- 1. 通用与布局 --- */
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: #f0f4f2; /* 柔和的背景色 */
+    color: #333;
+    -webkit-font-smoothing: antialiased;
+}
+button {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+button:hover {
+    filter: brightness(1.1);
+}
+button:active {
+    filter: brightness(0.9);
+}
 
-/* 顶部导航 */
-.top-nav { display: flex; justify-content: space-between; align-items: center; background: white; padding: 10px 15px; border-bottom: 2px solid #00703c; }
-.coin-display { color: #d4a017; font-weight: bold; font-size: 18px; }
-.nav-btn { width: auto; font-size: 13px; padding: 6px 12px; }
+/* --- 2. 登录与注册 --- */
+#auth-section {
+    max-width: 350px;
+    margin: 50px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    text-align: center;
+}
+#auth-section h1 {
+    color: #005a30;
+}
+#auth-section input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+#auth-section button {
+    width: 100%;
+    padding: 12px;
+    background: #00703c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+}
+#auth-section p a {
+    color: #00703c;
+    font-weight: bold;
+    text-decoration: none;
+}
 
-/* 场次卡片 */
-.lobby-content { padding: 15px; }
-.game-card { background: white; border-radius: 15px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-left: 6px solid #00703c; }
-.game-card h3 { margin: 0; font-size: 16px; }
-.game-card p { margin: 5px 0 0; color: #666; font-size: 13px; }
-.card-right { background: #e6f7ef; color: #00703c; padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+/* --- 3. 游戏大厅 --- */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 10px 15px;
+    border-bottom: 2px solid #00703c;
+}
+.user-info {
+    text-align: center;
+}
+.coin-display {
+    color: #d4a017;
+    font-weight: bold;
+    font-size: 18px;
+}
+.nav-btn {
+    width: auto;
+    font-size: 13px;
+    padding: 6px 12px;
+    background: #eee;
+    color: #333;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+.logout {
+    background: #fbecec;
+    color: #c0392b;
+    border-color: #c0392b;
+}
 
-/* 牌桌与 3-5-5 */
-.lane-header { background: #005a30; color: white; padding: 5px 15px; border-radius: 10px 10px 0 0; margin: 0 10px; font-size: 12px; display: inline-block; cursor: pointer; }
-.cards-grid { background: #00703c; padding: 10px; display: flex; gap: 5px; min-height: 80px; margin: 0 10px 10px 10px; border-radius: 0 10px 10px 10px; flex-wrap: wrap; }
-.poker-card { width: 55px; aspect-ratio: 2/3; border-radius: 4px; border: 2px solid transparent; background: white; transition: all 0.1s; }
+.game-card {
+    background: white;
+    border-radius: 15px;
+    padding: 15px;
+    margin: 20px 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 6px solid #00703c;
+}
+.game-card.midday {
+    border-left-color: #f39c12;
+}
+.card-left h3 { margin: 0 0 5px 0; }
+.card-left p { margin: 0; color: #666; font-size: 14px; }
+.card-right {
+    background: #00703c;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+.game-card.midday .card-right {
+    background: #f39c12;
+}
 
-/* 核心：选中变红高亮 */
-.poker-card.selected { border: 3px solid #ff0000; transform: translateY(-8px); box-shadow: 0 5px 15px rgba(255,0,0,0.4); }
 
-.controls { padding: 10px; text-align: center; }
-.btn-row { display: flex; gap: 10px; padding: 0 10px; }
-.btn-smart { background: #eee; color: #333; }
-.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; }
-.modal-content { background: white; padding: 25px; border-radius: 20px; width: 80%; }
+/* --- 4. 游戏牌桌 --- */
+.track-header {
+    display: flex;
+    justify-content: space-around;
+    background: white;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+.track-node {
+    padding: 2px 8px;
+}
+.track-node.finished {
+    background: #00703c;
+    color: white;
+    border-radius: 4px;
+}
+.table-container {
+    padding: 0 5px;
+}
+.lane-header {
+    background: #005a30;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 10px 10px 0 0;
+    margin: 0 10px;
+    font-size: 12px;
+    display: inline-block;
+    cursor: pointer;
+}
+.cards-grid {
+    background: #00703c;
+    padding: 10px;
+    display: flex;
+    gap: 5px;
+    min-height: 80px;
+    margin: 0 10px 10px 10px;
+    border-radius: 0 10px 10px 10px;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+.poker-card {
+    width: 55px;
+    aspect-ratio: 2/3;
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background: white;
+    transition: all 0.2s ease-out;
+}
+.poker-card.selected {
+    border-color: #ff3333;
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(255, 0, 0, 0.4);
+}
+.controls {
+    text-align: center;
+    padding: 10px 15px;
+}
+.btn-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+.btn-row button {
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+/* --- 5. 积分管理弹窗 --- */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 320px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    text-align: center;
+}
+.modal-content h3 {
+    margin-top: 0;
+    color: #005a30;
+}
+#search-result {
+    margin: 15px 0;
+    padding: 10px;
+    background: #f0f4f2;
+    border-radius: 8px;
+    min-height: 40px;
+}
+#transfer-box button {
+    background: #d35400; /* 确认赠送用橙色 */
+    margin-top: 10px;
+}
+.modal-content .close-btn {
+    margin-top: 15px;
+    background: #eee;
+    color: #333;
+}

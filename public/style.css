@@ -1,17 +1,14 @@
-body { margin: 0; font-family: sans-serif; background: #f4f7f6; color: #333; }
-.container { max-width: 350px; margin: 40px auto; background: white; padding: 25px; border-radius: 20px; text-align: center; }
-input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+body { margin: 0; font-family: sans-serif; background: #f4f7f6; }
+.container { max-width: 350px; margin: 50px auto; background: white; padding: 25px; border-radius: 20px; text-align: center; }
+input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
 button { width: 100%; padding: 12px; background: #00703c; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-/* 牌墩头部按钮化 */
-.lane-header { background: #00703c; color: white; padding: 6px 15px; border-radius: 10px 10px 0 0; margin: 0 10px; font-size: 12px; display: inline-block; cursor: pointer; }
+.lane-header { background: #00703c; color: white; padding: 5px 15px; border-radius: 10px 10px 0 0; margin: 0 10px; font-size: 12px; display: inline-block; cursor: pointer; }
 .cards-grid { background: #005a30; padding: 10px; display: flex; gap: 5px; min-height: 80px; margin: 0 10px 15px 10px; border-radius: 0 10px 10px 10px; flex-wrap: wrap; }
 
-/* 扑克牌高亮变红 */
-.poker-card { width: 55px; aspect-ratio: 2/3; background: white; border-radius: 4px; border: 2px solid transparent; transition: transform 0.1s; }
-.poker-card.selected { border: 3px solid #ff0000; transform: translateY(-5px); box-shadow: 0 5px 15px rgba(255,0,0,0.4); }
+/* 关键：变红高亮 */
+.poker-card { width: 55px; aspect-ratio: 2/3; background: white; border-radius: 4px; border: 2px solid transparent; }
+.poker-card.selected { border: 3px solid #ff0000; transform: translateY(-5px); box-shadow: 0 5px 15px rgba(255,0,0,0.5); }
 
-.top-nav { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background: white; border-bottom: 2px solid #00703c; }
+.top-nav { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: white; border-bottom: 2px solid #00703c; }
 .game-card { background: white; border-radius: 15px; padding: 15px; margin: 15px; border-left: 6px solid #00703c; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-.track-header { display: flex; justify-content: space-around; background: white; padding: 10px; }
-.track-node.finished { background: #00703c; color: white; padding: 2px 8px; border-radius: 4px; }

@@ -5,28 +5,26 @@ export async function onRequestPost(context) {
     try {
         const { userId, sessionType } = await context.request.json();
 
-        // 1. 寻找玩家是否已在活跃轨道中
+        // 1. 检查玩家是否已在活跃轨道
         let track = await db.prepare(
             "SELECT * FROM tracks WHERE session_type = ? AND (user_e = ? OR user_s = ? OR user_w = ? OR user_n = ?) AND status = 'ACTIVE' LIMIT 1"
         ).bind(sessionType, userId, userId, userId, userId).first();
 
         let seat = '';
-
         if (!track) {
-            // 2. 寻找有空位的轨道
+            // 2. 寻找空位
             track = await db.prepare(
                 "SELECT * FROM tracks WHERE session_type = ? AND status = 'ACTIVE' AND (user_e IS NULL OR user_s IS NULL OR user_w IS NULL OR user_n IS NULL) ORDER BY id DESC LIMIT 1"
             ).bind(sessionType).first();
 
             if (!track) {
-                // 3. 全满，开新轨道
-                const result = await db.prepare("INSERT INTO tracks (session_type, user_e) VALUES (?, ?)")
-                    .bind(sessionType, userId).run();
+                // 3. 开新轨道
+                const result = await db.prepare("INSERT INTO tracks (session_type, user_e) VALUES (?, ?)").bind(sessionType, userId).run();
                 const newId = result.meta.last_row_id;
                 track = await db.prepare("SELECT * FROM tracks WHERE id = ?").bind(newId).first();
                 seat = 'user_e';
             } else {
-                // 4. 有位，填空
+                // 4. 坐空位
                 if (!track.user_e) seat = 'user_e';
                 else if (!track.user_s) seat = 'user_s';
                 else if (!track.user_w) seat = 'user_w';
@@ -42,12 +40,10 @@ export async function onRequestPost(context) {
 
         // 5. 获取或生成车厢
         let carriage = await db.prepare("SELECT * FROM carriages WHERE track_id = ? AND round_index = 1").bind(track.id).first();
-        
         if (!carriage) {
             const allHands = [];
             const suits = ['spades', 'hearts', 'diamonds', 'clubs'];
             const values = ['2','3','4','5','6','7','8','9','10','jack','queen','king','ace'];
-
             for(let i=0; i<10; i++) {
                 let deck = [];
                 suits.forEach(s => values.forEach(v => deck.push({value: v, suit: s})));
@@ -55,40 +51,21 @@ export async function onRequestPost(context) {
                     const k = Math.floor(Math.random() * (j + 1));
                     [deck[j], deck[k]] = [deck[k], deck[j]];
                 }
-                allHands.push({
-                    user_e: deck.slice(0, 13), user_s: deck.slice(13, 26),
-                    user_w: deck.slice(26, 39), user_n: deck.slice(39, 52)
-                });
+                allHands.push({ user_e: deck.slice(0, 13), user_s: deck.slice(13, 26), user_w: deck.slice(26, 39), user_n: deck.slice(39, 52) });
             }
-            const handsJson = JSON.stringify(allHands);
-            const res = await db.prepare("INSERT INTO carriages (track_id, round_index, hands_json) VALUES (?, 1, ?)")
-                .bind(track.id, handsJson).run();
-            carriage = { id: res.meta.last_row_id, hands_json: handsJson };
+            const res = await db.prepare("INSERT INTO carriages (track_id, round_index, hands_json) VALUES (?, 1, ?)").bind(track.id, JSON.stringify(allHands)).run();
+            carriage = { id: res.meta.last_row_id, hands_json: JSON.stringify(allHands) };
         }
 
-        // 6. 确定当前局数
-        const lastAction = await db.prepare(
-            "SELECT table_index FROM player_actions WHERE user_id = ? AND carriage_id = ? AND status = 'SUBMITTED' ORDER BY table_index DESC LIMIT 1"
-        ).bind(userId, carriage.id).first();
-
+        // 6. 获取当前局进度
+        const lastAction = await db.prepare("SELECT table_index FROM player_actions WHERE user_id = ? AND carriage_id = ? AND status = 'SUBMITTED' ORDER BY table_index DESC LIMIT 1").bind(userId, carriage.id).first();
         const tableIndex = lastAction ? lastAction.table_index + 1 : 0;
-        const handsData = JSON.parse(carriage.hands_json);
+        const currentHand = JSON.parse(carriage.hands_json)[tableIndex][seat];
 
-        // 7. 记录 VIEWED
-        await db.prepare("INSERT INTO player_actions (user_id, carriage_id, table_index, status) VALUES (?, ?, ?, 'VIEWED')")
-            .bind(userId, carriage.id, tableIndex).run();
+        await db.prepare("INSERT OR IGNORE INTO player_actions (user_id, carriage_id, table_index, status) VALUES (?, ?, ?, 'VIEWED')").bind(userId, carriage.id, tableIndex).run();
 
-        return new Response(JSON.stringify({
-            success: true,
-            trackId: track.id,
-            carriageId: carriage.id,
-            seat: seat,
-            tableIndex: tableIndex,
-            currentHand: handsData[tableIndex][seat],
-            trackProgress: [track.user_e?1:0, track.user_s?1:0, track.user_w?1:0, track.user_n?1:0]
-        }), { headers: { 'Content-Type': 'application/json' } });
-
+        return new Response(JSON.stringify({ success: true, trackId: track.id, carriageId: carriage.id, seat, tableIndex, currentHand, trackProgress: [track.user_e?1:0, track.user_s?1:0, track.user_w?1:0, track.user_n?1:0] }), { headers: { 'Content-Type': 'application/json' } });
     } catch (e) {
-        return new Response(JSON.stringify({ success: false, error: e.message }), { status: 500 });
+        return new Response(JSON.stringify({ success: false, error: "后端逻辑崩溃: " + e.message }), { status: 500 });
     }
 }

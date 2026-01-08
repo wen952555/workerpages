@@ -9,17 +9,15 @@
 </head>
 <body>
     <div id="app">
-        <!-- 登录区 -->
         <div id="auth-section" class="container">
-            <h1>玩家登录</h1>
+            <h1 id="auth-title">登录</h1>
             <input type="tel" id="auth-phone" placeholder="手机号">
             <input type="text" id="auth-nick" placeholder="昵称" style="display:none;">
             <input type="password" id="auth-pass" maxlength="6" placeholder="密码">
             <button onclick="handleAuth()">进入游戏</button>
-            <p><a href="#" onclick="toggleAuthMode(true)">立即注册账号</a></p>
+            <p><a href="#" onclick="toggleAuthMode(true)">立即注册</a></p>
         </div>
 
-        <!-- 大厅 -->
         <div id="game-hall" style="display:none;">
             <div class="top-nav">
                 <button onclick="logout()">退出</button>
@@ -38,7 +36,6 @@
             </div>
         </div>
 
-        <!-- 牌桌 -->
         <div id="game-table" style="display:none;">
             <div class="track-header" id="track-info"></div>
             <div class="table-container">
@@ -51,12 +48,10 @@
             </div>
             <div class="controls">
                 <button onclick="smartSort()" style="background:#eee;color:#333;width:40%">智能理牌</button>
-                <button onclick="submitHand()" style="width:50%">确认提交</button>
+                <button onclick="submitHand()" style="width:55%">确认提交</button>
             </div>
         </div>
     </div>
-
-    <!-- 顺序加载 -->
     <script src="js/auth.js"></script>
     <script src="js/lobby.js"></script>
     <script src="js/game.js"></script>

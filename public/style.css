@@ -1,36 +1,21 @@
-/* --- 1. 通用与布局 --- */
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background: #f0f4f2; /* 柔和的背景色 */
+    font-family: -apple-system, sans-serif;
+    background: #f4f7f6;
     color: #333;
-    -webkit-font-smoothing: antialiased;
-}
-button {
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-button:hover {
-    filter: brightness(1.1);
-}
-button:active {
-    filter: brightness(0.9);
 }
 
-/* --- 2. 登录与注册 --- */
-#auth-section {
+.container {
     max-width: 350px;
-    margin: 50px auto;
+    margin: 40px auto;
     background: white;
-    padding: 30px;
+    padding: 25px;
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     text-align: center;
 }
-#auth-section h1 {
-    color: #005a30;
-}
-#auth-section input {
+
+input {
     width: 100%;
     padding: 12px;
     margin: 10px 0;
@@ -39,7 +24,8 @@ button:active {
     box-sizing: border-box;
     font-size: 16px;
 }
-#auth-section button {
+
+button {
     width: 100%;
     padding: 12px;
     background: #00703c;
@@ -47,94 +33,12 @@ button:active {
     border: none;
     border-radius: 8px;
     font-weight: bold;
-}
-#auth-section p a {
-    color: #00703c;
-    font-weight: bold;
-    text-decoration: none;
+    cursor: pointer;
 }
 
-/* --- 3. 游戏大厅 --- */
-.top-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: white;
-    padding: 10px 15px;
-    border-bottom: 2px solid #00703c;
-}
-.user-info {
-    text-align: center;
-}
-.coin-display {
-    color: #d4a017;
-    font-weight: bold;
-    font-size: 18px;
-}
-.nav-btn {
-    width: auto;
-    font-size: 13px;
-    padding: 6px 12px;
-    background: #eee;
-    color: #333;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-}
-.logout {
-    background: #fbecec;
-    color: #c0392b;
-    border-color: #c0392b;
-}
-
-.game-card {
-    background: white;
-    border-radius: 15px;
-    padding: 15px;
-    margin: 20px 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-left: 6px solid #00703c;
-}
-.game-card.midday {
-    border-left-color: #f39c12;
-}
-.card-left h3 { margin: 0 0 5px 0; }
-.card-left p { margin: 0; color: #666; font-size: 14px; }
-.card-right {
-    background: #00703c;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 8px;
-    font-weight: bold;
-}
-.game-card.midday .card-right {
-    background: #f39c12;
-}
-
-
-/* --- 4. 游戏牌桌 --- */
-.track-header {
-    display: flex;
-    justify-content: space-around;
-    background: white;
-    padding: 10px;
-    margin-bottom: 10px;
-}
-.track-node {
-    padding: 2px 8px;
-}
-.track-node.finished {
-    background: #00703c;
-    color: white;
-    border-radius: 4px;
-}
-.table-container {
-    padding: 0 5px;
-}
+/* 牌墩标题 */
 .lane-header {
-    background: #005a30;
+    background: #00703c;
     color: white;
     padding: 5px 15px;
     border-radius: 10px 10px 0 0;
@@ -143,83 +47,96 @@ button:active {
     display: inline-block;
     cursor: pointer;
 }
+
 .cards-grid {
-    background: #00703c;
+    background: #005a30;
     padding: 10px;
     display: flex;
     gap: 5px;
     min-height: 80px;
-    margin: 0 10px 10px 10px;
+    margin: 0 10px 15px 10px;
     border-radius: 0 10px 10px 10px;
     flex-wrap: wrap;
-    align-content: flex-start;
 }
+
+/* 扑克牌与红框高亮 */
 .poker-card {
     width: 55px;
     aspect-ratio: 2/3;
+    background: white;
     border-radius: 4px;
     border: 2px solid transparent;
-    background: white;
-    transition: all 0.2s ease-out;
+    transition: all 0.1s;
 }
+
 .poker-card.selected {
-    border-color: #ff3333;
-    transform: translateY(-8px);
-    box-shadow: 0 8px 20px rgba(255, 0, 0, 0.4);
+    border: 3px solid #ff0000;
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(255,0,0,0.4);
 }
-.controls {
-    text-align: center;
+
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
     padding: 10px 15px;
+    border-bottom: 2px solid #00703c;
 }
+
+.coin-display {
+    color: #d4a017;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.game-card {
+    background: white;
+    border-radius: 15px;
+    padding: 15px;
+    margin: 15px;
+    border-left: 6px solid #00703c;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.track-header {
+    display: flex;
+    justify-content: space-around;
+    background: white;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.track-node.finished {
+    background: #00703c;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.modal {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    width: 80%;
+}
+
 .btn-row {
     display: flex;
     gap: 10px;
-    margin-top: 10px;
-}
-.btn-row button {
-    border-radius: 8px;
-    font-size: 16px;
 }
 
-/* --- 5. 积分管理弹窗 --- */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-}
-.modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    width: 90%;
-    max-width: 320px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    text-align: center;
-}
-.modal-content h3 {
-    margin-top: 0;
-    color: #005a30;
-}
-#search-result {
-    margin: 15px 0;
-    padding: 10px;
-    background: #f0f4f2;
-    border-radius: 8px;
-    min-height: 40px;
-}
-#transfer-box button {
-    background: #d35400; /* 确认赠送用橙色 */
-    margin-top: 10px;
-}
-.modal-content .close-btn {
-    margin-top: 15px;
+.btn-smart {
     background: #eee;
     color: #333;
 }

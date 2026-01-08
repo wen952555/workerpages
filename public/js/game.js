@@ -1,10 +1,6 @@
-/**
- * game.js - 处理场次加入、多选变红、批量移动
- */
 let currentGame = null;
-let selectedIndices = []; // 存储当前选中的牌索引
+let selectedIndices = []; 
 
-// 进入场次
 async function joinSession(type) {
     try {
         const res = await fetch('/api/join-game', {
@@ -16,8 +12,8 @@ async function joinSession(type) {
         if (data.success) {
             currentGame = data; 
             showTable();
-        } else alert(data.error);
-    } catch (e) { alert("进入场次失败"); }
+        } else alert("进入失败: " + data.error);
+    } catch (e) { alert("服务器连接故障"); }
 }
 
 function showTable() {
@@ -54,28 +50,18 @@ function renderCards() {
     });
 }
 
-// 批量移动：点击牌墩标题移入选中的牌
 function moveSelectedToLane(targetBaseIndex) {
     if (selectedIndices.length === 0) return;
-
-    // 1. 提取选中的牌对象
     const pickedCards = selectedIndices.map(idx => currentGame.currentHand[idx]);
-    
-    // 2. 从原数组移除选中的牌 (由后往前删防止索引错乱)
     const sortedDesc = [...selectedIndices].sort((a, b) => b - a);
     sortedDesc.forEach(idx => currentGame.currentHand.splice(idx, 1));
-
-    // 3. 插入到目标位置
     currentGame.currentHand.splice(targetBaseIndex, 0, ...pickedCards);
-
-    // 4. 重置状态
     selectedIndices = [];
     renderCards();
 }
 
-// 提交理牌
 async function submitHand() {
-    if(!confirm("确定提交？提交后无法修改")) return;
+    if(!confirm("提交当前方案？")) return;
     const res = await fetch('/api/submit-hand', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -91,7 +77,7 @@ async function submitHand() {
         alert(`第 ${data.nextIndex + 1} 局开始！`);
         renderCards();
     } else {
-        alert("本轮场次已打完！");
+        alert("本轮已完成！");
         location.reload();
     }
 }

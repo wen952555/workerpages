@@ -5,7 +5,7 @@ export async function onRequestPost(context) {
     try {
         const { userId, sessionType } = await context.request.json();
 
-        // 1. 查找玩家是否已在活跃轨道中
+        // 1. 寻找玩家是否已在活跃轨道中
         let track = await db.prepare(
             "SELECT * FROM tracks WHERE session_type = ? AND (user_e = ? OR user_s = ? OR user_w = ? OR user_n = ?) AND status = 'ACTIVE' LIMIT 1"
         ).bind(sessionType, userId, userId, userId, userId).first();
@@ -40,7 +40,7 @@ export async function onRequestPost(context) {
             else seat = 'user_n';
         }
 
-        // 5. 获取或生成第1轮车厢 (10局牌)
+        // 5. 获取或生成车厢
         let carriage = await db.prepare("SELECT * FROM carriages WHERE track_id = ? AND round_index = 1").bind(track.id).first();
         
         if (!carriage) {
@@ -66,7 +66,7 @@ export async function onRequestPost(context) {
             carriage = { id: res.meta.last_row_id, hands_json: handsJson };
         }
 
-        // 6. 确定进度
+        // 6. 确定当前局数
         const lastAction = await db.prepare(
             "SELECT table_index FROM player_actions WHERE user_id = ? AND carriage_id = ? AND status = 'SUBMITTED' ORDER BY table_index DESC LIMIT 1"
         ).bind(userId, carriage.id).first();
@@ -74,7 +74,7 @@ export async function onRequestPost(context) {
         const tableIndex = lastAction ? lastAction.table_index + 1 : 0;
         const handsData = JSON.parse(carriage.hands_json);
 
-        // 记录已看牌 
+        // 7. 记录 VIEWED
         await db.prepare("INSERT INTO player_actions (user_id, carriage_id, table_index, status) VALUES (?, ?, ?, 'VIEWED')")
             .bind(userId, carriage.id, tableIndex).run();
 
